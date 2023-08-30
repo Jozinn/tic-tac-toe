@@ -13,19 +13,12 @@ class Board {
         return false;
     }
 
-    checkWinner() {
-        this.winVectors.forEach(vector => {
-            const fieldsToCheck = [this.fields[vector[0]], this.fields[vector[1], this.fields[vector[2]]]];
-            if (fieldsToCheck.filter(field => field == null).length) {
-                return false;
-            }
-
-            if (fieldsToCheck[0] == fieldsToCheck[1] && fieldsToCheck[1] == fieldsToCheck[2]) {
-                return true;
-            }
-
-            return false;
+    checkWinner(p) {
+      return this.winVectors.some(vector => {
+        return vector.every(index => {
+            return this.fields[index] == p.marker;
         });
+      });
     }
 
     play(position) {
@@ -33,9 +26,10 @@ class Board {
 
         this.fields[position] = this.currentPlayer().marker;
 
-        if(this.checkWinner()) {
+        if(this.checkWinner(this.currentPlayer())) {
             this.currentPlayer().score++;
             console.log(`${this.currentPlayer()} wins!`);
+            this.fields = this.fields.map(field => field = null);
             return;
         }
 
@@ -81,3 +75,15 @@ function updateDOM() {
         cells[i].textContent = game.fields[i];
     }
 }
+
+// Array.prototype.anyb = function(cb) {
+//     const filtered = this.filter(el => cb(el));
+//     if(!this.length) return false;
+//     return true;
+// }
+
+// Array.prototype.allb = function(cb) {
+//     const filtered = this.filter(el => cb(el));
+//     if(this.length == filtered.length) return true;
+//     return false;
+// }
